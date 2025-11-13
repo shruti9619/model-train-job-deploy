@@ -61,7 +61,7 @@ def validate_config(config_data: Dict[str, Any], model: type[BaseModel]) -> Base
     try:
         return model(**config_data)
     except ValidationError as e:
-        logging.getLogger("diabetes_pipeline").error("Config validation failed:")
+        logging.getLogger("classification_pipeline").error("Config validation failed:")
         for err in e.errors():
             loc = " -> ".join(str(x) for x in err["loc"])
             logging.error(f"  {loc}: {err['msg']} ({err['type']})")
