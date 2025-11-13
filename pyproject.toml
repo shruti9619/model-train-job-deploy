@@ -18,3 +18,8 @@ dependencies = [
 
 [tool.hatch.build.targets.wheel]
 packages = ["classification_pipeline"]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.1",
+]
