@@ -13,7 +13,7 @@ class PipelineConfig(BaseModel):
     test_size: float = 0.2
     random_state: int = 42
 
-class DiabetesPipeline:
+class ClassificationPipeline:
     def __init__(self, config: Optional[PipelineConfig] = None):
         self.cfg = config or PipelineConfig()
         self.logger = setup_logger()
@@ -22,8 +22,8 @@ class DiabetesPipeline:
         self.model = None
         self.eval_results = None
 
-    def load_and_clean(self, path=None):
-        self.raw_df = replace_zeros_with_nan(load_data(path))
+    def load_and_clean(self):
+        self.raw_df = replace_zeros_with_nan(load_data())
         self.logger.info("Missing values after cleaning:\n", self.raw_df.isnull().sum())
 
     def prepare_features(self):

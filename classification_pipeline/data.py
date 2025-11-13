@@ -1,7 +1,7 @@
 import pandas as pd
 from pathlib import Path
 
-DATA_PATH = Path(__file__).parent.parent / "data" / "diabetes.csv"
+DATA_PATH = Path(__file__).parent / "data" / "diabetes.csv"
 
 def load_data(path: Path | str = DATA_PATH) -> pd.DataFrame:
     df = pd.read_csv(path)
