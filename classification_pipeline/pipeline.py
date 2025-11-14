@@ -2,10 +2,12 @@ from pydantic import BaseModel
 from typing import Optional
 import pandas as pd
 
+from sklearn.neighbors import KNeighborsClassifier
+
 from .utils import setup_logger
 from .data import load_data, replace_zeros_with_nan
 from .features import split_and_impute
-from .model import KNNFactory, evaluate_model, plot_confusion
+from .model import ClassificationModelFactory, evaluate_model, plot_confusion
 
 class PipelineConfig(BaseModel):
     k: int = 5
@@ -22,6 +24,9 @@ class ClassificationPipeline:
         self.model = None
         self.eval_results = None
 
+        # register KNN model
+        ClassificationModelFactory.register("knn", KNeighborsClassifier)
+
     def load_and_clean(self):
         self.raw_df = replace_zeros_with_nan(load_data())
         self.logger.info("Missing values after cleaning:\n", self.raw_df.isnull().sum())
@@ -37,7 +42,7 @@ class ClassificationPipeline:
     def fit(self):
         if self.X_train is None:
             self.prepare_features()
-        self.model = KNNFactory.create(k=self.cfg.k)
+        self.model = ClassificationModelFactory.create("knn", **self.cfg.model_dump())
         self.model.fit(self.X_train, self.y_train)
         self.logger.info(f"KNN (k={self.cfg.k}) trained.")
 
