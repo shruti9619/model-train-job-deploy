@@ -41,11 +41,11 @@ class ClassificationModelFactory:
         cls._registry[name] = model_cls
 
     @classmethod
-    def create(cls, model_name: str, model_params) -> ClassificationModel:
+    def create(cls, model_name: str, model_params: dict) -> ClassificationModel:
         if model_name not in cls._registry:
             raise ValueError(f"Model '{model_name}' is not registered.")
         model_cls = cls._registry[model_name]
-        return model_cls(**model_params.model_dump())
+        return model_cls(**model_params)
 
     @classmethod
     def list_models(cls):

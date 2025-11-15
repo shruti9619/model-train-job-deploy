@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional, Union, Literal
+from typing import Optional, Literal
 import pandas as pd
 
 from sklearn.neighbors import KNeighborsClassifier
@@ -9,14 +9,13 @@ from .utils import setup_logger
 from .data import load_data, replace_zeros_with_nan
 from .features import split_and_impute
 from .model import ClassificationModelFactory, evaluate_model, plot_confusion
-from .model_params import KNNConfig, DecisionTreeConfig
 
 
 class PipelineConfig(BaseModel):
     test_size: float = 1 / 3
     random_state: int = 42
     model_name: Literal["knn", "dtree"] = "dtree"  # or other registered models
-    model_params: Union[KNNConfig, DecisionTreeConfig] = DecisionTreeConfig()
+    model_params: dict = {}
 
 
 class ClassificationPipeline:
@@ -67,7 +66,7 @@ class ClassificationPipeline:
         )
         self.model.fit(self.X_train, self.y_train)
         self.logger.info(
-            f"{self.cfg.model_name} (params={self.cfg.model_params} trained."
+            f"{self.cfg.model_name} (params={self.cfg.model_params}) trained."
         )
 
     def evaluate(self):
