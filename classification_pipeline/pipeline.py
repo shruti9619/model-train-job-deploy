@@ -9,11 +9,12 @@ from .data import load_data, replace_zeros_with_nan
 from .features import split_and_impute
 from .model import ClassificationModelFactory, evaluate_model, plot_confusion
 
+
 class PipelineConfig(BaseModel):
-    k: int = 5
-    impute_strategy: str = "median"
-    test_size: float = 0.2
+    n_neighbors: int = 5
+    test_size: float = 1/3
     random_state: int = 42
+
 
 class ClassificationPipeline:
     def __init__(self, config: Optional[PipelineConfig] = None):
@@ -32,19 +33,32 @@ class ClassificationPipeline:
         self.logger.info("Missing values after cleaning:\n", self.raw_df.isnull().sum())
 
     def prepare_features(self):
-        self.X_train, self.X_test, self.y_train, self.y_test, _, _ = split_and_impute(
+        self.raw_df["Glucose"].fillna(self.raw_df["Glucose"].mean(), inplace=True)
+        self.raw_df["BloodPressure"].fillna(
+            self.raw_df["BloodPressure"].mean(), inplace=True
+        )
+        self.raw_df["SkinThickness"].fillna(
+            self.raw_df["SkinThickness"].median(), inplace=True
+        )
+        self.raw_df["Insulin"].fillna(self.raw_df["Insulin"].median(), inplace=True)
+        self.raw_df["BMI"].fillna(self.raw_df["BMI"].median(), inplace=True)
+
+        self.X_train, self.X_test, self.y_train, self.y_test, _ = split_and_impute(
             self.raw_df,
-            impute_strategy=self.cfg.impute_strategy,
             test_size=self.cfg.test_size,
             random_state=self.cfg.random_state,
+            stratify_y=True,
         )
 
     def fit(self):
         if self.X_train is None:
             self.prepare_features()
-        self.model = ClassificationModelFactory.create("knn", **self.cfg.model_dump())
+        self.model = ClassificationModelFactory.create(
+            "knn",
+            **{"n_neighbors": self.cfg.n_neighbors},
+        )
         self.model.fit(self.X_train, self.y_train)
-        self.logger.info(f"KNN (k={self.cfg.k}) trained.")
+        self.logger.info(f"KNN (k={self.cfg.n_neighbors}) trained.")
 
     def evaluate(self):
         if self.model is None:
