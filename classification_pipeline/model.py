@@ -3,6 +3,21 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 
+
+# old factory pattern for KNN model was here
+# we are moving to a more generic factory below where any model can be registered
+# and created by name instead of having a separate factory for each model type 
+
+# class KNNFactory:
+#     @staticmethod
+#     def create(k: int = 5, **kwargs) -> KNeighborsClassifier:
+#         return KNeighborsClassifier(n_neighbors=k, **kwargs)
+
+# Generic Classification Model Factory (registry pattern)
+# The basis of this pattern is an abstract base class, implementation classes, and a factory class
+# that maintains a registry of model types. The abstract base class defines the interface for all models.
+# and makes sure that the factory only registers compatible models.
+
 class ClassificationModel:
     def fit(self, X, y):
         raise NotImplementedError
