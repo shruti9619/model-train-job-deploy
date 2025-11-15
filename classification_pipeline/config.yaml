@@ -1,3 +1,0 @@
-k: 7
-impute_strategy: "mean"
-test_size: 0.25

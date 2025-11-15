@@ -1,0 +1,3 @@
+model_name: knn
+model_params:
+  n_neighbors: 11
