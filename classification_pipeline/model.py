@@ -1,3 +1,5 @@
+from abc import ABC
+
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -18,7 +20,7 @@ import seaborn as sns
 # and makes sure that the factory only registers compatible models.
 
 
-class ClassificationModel:
+class IClassificationModel(ABC):
     def fit(self, X, y):
         raise NotImplementedError
 
@@ -32,7 +34,7 @@ class ClassificationModelFactory:
     @classmethod
     def register(cls, name: str, model_cls):
         # check instance
-        if not issubclass(model_cls, ClassificationModel) and not (
+        if not issubclass(model_cls, IClassificationModel) and not (
             hasattr(model_cls, "fit") and hasattr(model_cls, "predict")
         ):
             raise ValueError(
@@ -41,7 +43,7 @@ class ClassificationModelFactory:
         cls._registry[name] = model_cls
 
     @classmethod
-    def create(cls, model_name: str, model_params: dict) -> ClassificationModel:
+    def create(cls, model_name: str, model_params: dict) -> IClassificationModel:
         if model_name not in cls._registry:
             raise ValueError(f"Model '{model_name}' is not registered.")
         model_cls = cls._registry[model_name]
