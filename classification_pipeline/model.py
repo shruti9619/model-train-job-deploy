@@ -36,16 +36,20 @@ class ClassificationModelFactory:
             hasattr(model_cls, "fit") and hasattr(model_cls, "predict")
         ):
             raise ValueError(
-                "Model class must be a subclass of ClassificationModel with fit and predict methods."
+                "Model class must be a subclass of ClassificationModel or with fit and predict methods."
             )
         cls._registry[name] = model_cls
 
     @classmethod
-    def create(cls, key: str, **kwargs) -> ClassificationModel:
-        if key not in cls._registry:
-            raise ValueError(f"Model '{key}' is not registered.")
-        model_cls = cls._registry[key]
-        return model_cls(**kwargs)
+    def create(cls, model_name: str, model_params) -> ClassificationModel:
+        if model_name not in cls._registry:
+            raise ValueError(f"Model '{model_name}' is not registered.")
+        model_cls = cls._registry[model_name]
+        return model_cls(**model_params.model_dump())
+
+    @classmethod
+    def list_models(cls):
+        return list(cls._registry.keys())
 
 
 def evaluate_model(model, X_test, y_test):
