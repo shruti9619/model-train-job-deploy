@@ -67,7 +67,7 @@ class ClassificationPipeline:
         )
         self.model.fit(self.X_train, self.y_train)
         self.logger.info(
-            f"{self.cfg.model_name} (params={self.cfg.model_params.model_dump()} trained."
+            f"{self.cfg.model_name} (params={self.cfg.model_params} trained."
         )
 
     def evaluate(self):

@@ -1,4 +1,4 @@
-from classification_pipeline.pipeline import ClassificationPipeline, KNNConfig, DecisionTreeConfig, PipelineConfig
+from classification_pipeline import ClassificationPipeline, PipelineConfig
 from classification_pipeline.data import DATA_PATH
 
 
@@ -11,7 +11,7 @@ def test_full_pipeline(tmp_path):
 
     pconfig = PipelineConfig(
         model_name="dtree",
-        model_params=DecisionTreeConfig(),
+        model_params={"max_depth": 5, "random_state": 42},
     )
 
     pipe = ClassificationPipeline(config=pconfig)
