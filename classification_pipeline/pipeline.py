@@ -75,6 +75,7 @@ class ClassificationPipeline:
             self.fit()
         self.eval_results = evaluate_model(self.model, self.X_test, self.y_test)
         self.logger.info(f"Test accuracy: {self.eval_results['accuracy']:.4f}")
+        self.logger.info(f"Classification Report:\n{self.eval_results['report']}")
 
     def plot_confusion(self):
         if self.eval_results is None:
