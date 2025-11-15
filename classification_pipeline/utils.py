@@ -1,17 +1,21 @@
 """
 Utility functions and shared helpers for the classification pipeline.
 """
+
 import logging
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 import json
 import yaml
 from pydantic import BaseModel, ValidationError
 
+
 # --------------------------------------------------------------------------- #
 # Logging Setup
 # --------------------------------------------------------------------------- #
-def setup_logger(name: str = "classification_pipeline", level: int = logging.INFO) -> logging.Logger:
+def setup_logger(
+    name: str = "classification_pipeline", level: int = logging.INFO
+) -> logging.Logger:
     """
     Configure and return a logger with consistent formatting.
     """
@@ -22,8 +26,7 @@ def setup_logger(name: str = "classification_pipeline", level: int = logging.INF
     logger.setLevel(level)
     handler = logging.StreamHandler()
     formatter = logging.Formatter(
-        fmt="%(asctime)s | %(name)s | %(levelname)s | %(message)s",
-        datefmt="%H:%M:%S"
+        fmt="%(asctime)s | %(name)s | %(levelname)s | %(message)s", datefmt="%H:%M:%S"
     )
     handler.setFormatter(formatter)
     logger.addHandler(handler)
