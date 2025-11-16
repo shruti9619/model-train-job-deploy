@@ -56,9 +56,8 @@ jobs:
       - name: Create Release
         if: github.ref == 'refs/heads/main' && startsWith(github.event.head_commit.message, 'release:')
         run: |
-          VERSION=${GITHUB_REF#refs/tags/}
-          gh release create "$VERSION" dist/* \
-            --title "$VERSION" \
+          gh release create "v0.1.0" dist/* \
+            --title "v0.1.0" \
             --notes "Auto release from CI"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
