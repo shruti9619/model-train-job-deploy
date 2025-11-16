@@ -54,7 +54,7 @@ jobs:
 
       # === Release on Tag ===
       - name: Create Release
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: github.ref == 'refs/heads/main' && startsWith(github.event.head_commit.message, 'release:')
         run: |
           VERSION=${GITHUB_REF#refs/tags/}
           gh release create "$VERSION" dist/* \
