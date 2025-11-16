@@ -48,7 +48,7 @@ jobs:
 
       - name: Test Docker container
         run: |
-          docker run -d -p 8080:80 --name test-container classification-ml
+          docker run --name test-container classification-ml
           sleep 10
           docker stop test-container
 
